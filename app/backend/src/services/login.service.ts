@@ -11,17 +11,20 @@ class LoginService {
     const user = await this.loginModel.findOne({
       where: { email },
     });
+
     if (!user) return { status: 'NOT_FOUND' };
 
     // ---------- CRIAR UM MIDDLEWARE -----------
 
-    const passwordCompare = await bcrypt.compare(password, user?.dataValues.password);
+    const passwordCompare = bcrypt.compareSync(password, user?.dataValues.password);
 
     if (!passwordCompare) {
       return { status: 'NOT_FOUND' };
     }
 
     const token = generateToken(user);
+
+    console.log(user.dataValues);
 
     return { status: 'SUCCESSFUL', data: token };
   }
