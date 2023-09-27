@@ -27,7 +27,6 @@ describe('GET /teams', () => {
   afterEach(function() {
     sinon.restore();
   });
-
   describe('GET /teams/:id', () => {
     it('Testando se retorna o time pelo ID', async function () {
       sinon.stub(TeamModel, 'findByPk').resolves(TeamModel.bulkBuild(teamFindAllMock)[0]);
