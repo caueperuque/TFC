@@ -1,3 +1,4 @@
+import { IFinish } from '../Interfaces/IFinish';
 import { IServiceResponse } from '../Interfaces/IServiceResponse';
 import MatchesModel from '../database/models/MatchesModel';
 
@@ -25,6 +26,20 @@ class MatchesService {
     });
 
     return { status: 'SUCCESSFUL', data: matches };
+  }
+
+  public async finishMatch(id: number): Promise<IServiceResponse<IFinish>> {
+    const match = await this.matchesModel.findOne({
+      where: { id },
+    });
+
+    if (!match) {
+      return { status: 'NOT_FOUND' };
+    }
+
+    await match.update({ inProgress: false });
+
+    return { status: 'OK', data: { message: 'Finished' } };
   }
 }
 
