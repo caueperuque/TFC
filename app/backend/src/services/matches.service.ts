@@ -53,6 +53,27 @@ class MatchesService {
 
     return { status: 'UPDATED' };
   }
+
+  public async createMatch(
+    homeTeamId: number,
+    homeTeamGoals:number,
+    awayTeamId:number,
+    awayTeamGoals:number,
+  ): Promise<IServiceResponse<MatchesModel>> {
+    if (!homeTeamId || !homeTeamGoals || !awayTeamId || !awayTeamGoals) {
+      return { status: 'INVALID' };
+    }
+
+    const created = await this.matchesModel.create({
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+      inProgress: true,
+    });
+
+    return { status: 'CREATED', data: created };
+  }
 }
 
 export default MatchesService;

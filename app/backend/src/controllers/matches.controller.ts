@@ -53,6 +53,28 @@ class MatchesController {
       message: `Match ${id} update for home team: ${homeTeamGoals} x away team: ${awayTeamGoals}`,
     });
   }
+
+  public async createMatch(req: Request, res: Response) {
+    const {
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+    } = req.body;
+
+    const match = await this.matchesService.createMatch(
+      homeTeamId,
+      homeTeamGoals,
+      awayTeamId,
+      awayTeamGoals,
+    );
+
+    if (match.status === 'INVALID') {
+      return res.status(400).json({ message: 'All fields must be filled' });
+    }
+
+    return res.status(201).json(match.data);
+  }
 }
 
 export default MatchesController;
