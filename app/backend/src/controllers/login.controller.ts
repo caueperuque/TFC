@@ -8,8 +8,8 @@ class LoginController {
     const { email, password } = req.body;
     const user = await this.loginService.login(String(email), String(password));
 
-    if (!email || !password) {
-      return res.status(400).json({ message: 'All fields must be filled' });
+    if (user.status === 'INVALID') {
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     return res.status(200).json({ token: user.data });

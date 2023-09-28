@@ -12,14 +12,15 @@ class LoginService {
       where: { email },
     });
 
-    if (!user) return { status: 'NOT_FOUND' };
+    if (!user) return { status: 'INVALID' };
 
     // ---------- CRIAR UM MIDDLEWARE -----------
 
     const passwordCompare = bcrypt.compareSync(password, user?.dataValues.password);
+    console.log(passwordCompare);
 
     if (!passwordCompare) {
-      return { status: 'NOT_FOUND' };
+      return { status: 'INVALID' };
     }
 
     const token = generateToken(user);
