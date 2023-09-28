@@ -1,3 +1,4 @@
+import { IUpdateMatch } from '../Interfaces/IUpdateMatch';
 import { IFinish } from '../Interfaces/IFinish';
 import { IServiceResponse } from '../Interfaces/IServiceResponse';
 import MatchesModel from '../database/models/MatchesModel';
@@ -33,13 +34,27 @@ class MatchesService {
       where: { id },
     });
 
-    if (!match) {
-      return { status: 'NOT_FOUND' };
-    }
+    if (!match) return { status: 'NOT_FOUND' };
 
     await match.update({ inProgress: false });
 
     return { status: 'OK', data: { message: 'Finished' } };
+  }
+
+  public async updateMatch(
+    id: number,
+    homeTG: number,
+    awayTG: number,
+  ): Promise<IServiceResponse<IUpdateMatch>> {
+    const match = await this.matchesModel.findOne({
+      where: { id },
+    });
+
+    if (!match) return { status: 'NOT_FOUND' };
+
+    await match.update({ homeTeamGoals: homeTG, awayTeamGoals: awayTG });
+
+    return { status: 'UPDATED' };
   }
 }
 
