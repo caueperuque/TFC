@@ -1,11 +1,13 @@
 import * as bcrypt from 'bcryptjs';
-import { IServiceResponse } from '../Interfaces/IServiceResponse';
+import Token from '../entities/Token';
 import LoginModel from '../database/models/UsersModel';
 import generateToken from './utils/generateToken';
+import { IServiceResponse } from '../Interfaces/IServiceResponse';
 import { IToken } from '../Interfaces/IToken';
 
 class LoginService {
   private loginModel = LoginModel;
+  private token = new Token();
 
   public async login(email: string, password: string): Promise<IServiceResponse<IToken>> {
     const user = await this.loginModel.findOne({
@@ -14,10 +16,7 @@ class LoginService {
 
     if (!user) return { status: 'INVALID' };
 
-    // ---------- CRIAR UM MIDDLEWARE -----------
-
     const passwordCompare = bcrypt.compareSync(password, user?.dataValues.password);
-    console.log(passwordCompare);
 
     if (!passwordCompare) {
       return { status: 'INVALID' };
@@ -25,10 +24,7 @@ class LoginService {
 
     const token = generateToken(user);
 
-    console.log(user.dataValues);
-
     return { status: 'SUCCESSFUL', data: token };
   }
 }
-
 export default LoginService;

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-class Validations {
+class ValidateLogin {
   public static validateLogin(req: Request, res: Response, next: NextFunction): Response | void {
     const { email, password } = req.body as { email: string, password: string };
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -18,4 +18,4 @@ class Validations {
   }
 }
 
-export default Validations;
+export default ValidateLogin;
