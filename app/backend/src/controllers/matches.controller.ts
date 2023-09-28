@@ -32,6 +32,12 @@ class MatchesController {
 
     const match = await this.matchesService.finishMatch(Number(id));
 
+    if (match.status === 'NOT_FOUND') {
+      return res.status(400).json(
+        { message: 'Match not found or already finished' },
+      );
+    }
+
     return res.status(200).json(match.data);
   }
 
@@ -39,7 +45,9 @@ class MatchesController {
     const { id } = req.params;
     const { homeTeamGoals, awayTeamGoals } = req.body;
 
-    await this.matchesService.updateMatch(Number(id), homeTeamGoals, awayTeamGoals);
+    const match = await this.matchesService.updateMatch(Number(id), homeTeamGoals, awayTeamGoals);
+
+    if (match.status === 'NOT_FOUND') return res.status(404).json({ message: 'Match not found' });
 
     return res.status(200).json({
       message: `Match ${id} update for home team: ${homeTeamGoals} x away team: ${awayTeamGoals}`,

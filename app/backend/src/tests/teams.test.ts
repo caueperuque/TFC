@@ -31,6 +31,14 @@ describe('GET /teams', () => {
       const chaiHttpResponse = await chai.request(app).get('/teams/1');
 
       expect(chaiHttpResponse.body).to.deep.equal(teamFindAllMock[0]);
+    });
+
+    it('Testando se retorna status 404, caso o id passado não seja encontrado', async function() {
+      sinon.stub(TeamModel, 'findByPk').resolves();
+
+      const chaiHttpResponse = await chai.request(app).get('/teams/4120');
+
+      expect(chaiHttpResponse.status).to.be.equal(404);
     })
-  })
+  });
 });

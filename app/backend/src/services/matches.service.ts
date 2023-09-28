@@ -30,13 +30,11 @@ class MatchesService {
   }
 
   public async finishMatch(id: number): Promise<IServiceResponse<IFinish>> {
-    const match = await this.matchesModel.findOne({
-      where: { id },
-    });
+    const [match] = await this.matchesModel.update({ inProgress: false }, { where: { id } });
 
     if (!match) return { status: 'NOT_FOUND' };
 
-    await match.update({ inProgress: false });
+    // console.log(teste);
 
     return { status: 'OK', data: { message: 'Finished' } };
   }
@@ -46,13 +44,12 @@ class MatchesService {
     homeTG: number,
     awayTG: number,
   ): Promise<IServiceResponse<IUpdateMatch>> {
-    const match = await this.matchesModel.findOne({
-      where: { id },
-    });
+    const [match] = await this.matchesModel.update(
+      { homeTeamGoals: homeTG, awayTeamGoals: awayTG },
+      { where: { id } },
+    );
 
     if (!match) return { status: 'NOT_FOUND' };
-
-    await match.update({ homeTeamGoals: homeTG, awayTeamGoals: awayTG });
 
     return { status: 'UPDATED' };
   }
