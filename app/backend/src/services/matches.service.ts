@@ -2,9 +2,11 @@ import { IUpdateMatch } from '../Interfaces/IUpdateMatch';
 import { IFinish } from '../Interfaces/IFinish';
 import { IServiceResponse } from '../Interfaces/IServiceResponse';
 import MatchesModel from '../database/models/MatchesModel';
+import TeamModel from '../database/models/TeamsModel';
 
 class MatchesService {
   private matchesModel = MatchesModel;
+  private teamModel = TeamModel;
 
   public async getAllMatches(): Promise<IServiceResponse<MatchesModel>> {
     const matches = await this.matchesModel.findAll({
@@ -61,8 +63,12 @@ class MatchesService {
     awayTeamGoals:number,
   ): Promise<IServiceResponse<MatchesModel>> {
     if (!homeTeamId || !homeTeamGoals || !awayTeamId || !awayTeamGoals) {
-      return { status: 'INVALID' };
+      return { status: 'NOT_FOUND' };
     }
+
+    const teamsExist = await this.matchValidate(homeTeamId, awayTeamId);
+
+    if (!teamsExist) return { status: 'NOT_FOUND' };
 
     const created = await this.matchesModel.create({
       homeTeamId,
@@ -73,6 +79,20 @@ class MatchesService {
     });
 
     return { status: 'CREATED', data: created };
+  }
+
+  public async matchValidate(homeTeamId: number, awayTeamId: number) {
+    const homeTeam = await this.teamModel.findOne({
+      where: { id: homeTeamId },
+    });
+
+    const awayTeam = await this.teamModel.findOne({
+      where: { id: awayTeamId },
+    });
+
+    if (!homeTeam || !awayTeam) return false;
+
+    return true;
   }
 }
 

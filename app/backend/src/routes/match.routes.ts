@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import MatchesController from '../controllers/matches.controller';
-import middleware from '../middlewares/auth.middleware';
+import middleware from '../middlewares/index';
 
 const router = Router();
 
@@ -10,16 +10,21 @@ router.get('/', (req, res) => matchesController.getAllMatches(req, res));
 
 router.patch(
   '/:id/finish',
-  middleware.validateToken,
+  middleware.authMiddleware.validateToken,
   (req, res) => matchesController.finishMatch(req, res),
 );
 
 router.patch(
   '/:id',
-  middleware.validateToken,
+  middleware.authMiddleware.validateToken,
   (req, res) => matchesController.updateMatch(req, res),
 );
 
-router.post('/', middleware.validateToken, (req, res) => matchesController.createMatch(req, res));
+router.post(
+  '/',
+  middleware.authMiddleware.validateToken,
+  middleware.matchMiddleware.validateMatch,
+  (req, res) => matchesController.createMatch(req, res),
+);
 
 export default router;

@@ -69,8 +69,8 @@ class MatchesController {
       awayTeamGoals,
     );
 
-    if (match.status === 'INVALID') {
-      return res.status(400).json({ message: 'All fields must be filled' });
+    if (match.status === 'NOT_FOUND') {
+      return res.status(404).json({ message: 'There is no team with such id!' });
     }
 
     return res.status(201).json(match.data);
