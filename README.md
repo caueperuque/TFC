@@ -23,6 +23,37 @@ No projeto TFC (The Football Center), desenvolvi um sistema completo dedicado a 
 
 Nesse projeto, adotei as melhores práticas de desenvolvimento, incluindo o uso de TypeScript para um código mais seguro e legível, bem como o método TDD (Desenvolvimento Orientado por Testes) para garantir a confiabilidade do back-end. Com o sistema em funcionamento, os usuários podem acessar o site, obter informações atualizadas sobre partidas de futebol e classificações, e desfrutar de uma experiência de usuário de alta qualidade.
 
-# Conclusão
+# Como Usar
 
-Em resumo, o projeto TFC representa um exemplo de desenvolvimento completo, cobrindo o desenvolvimento de um back-end dockerizado, modelagem de dados com Sequelize, uso de TypeScript, Express, Node.js e integração eficiente com um banco de dados MySQL para fornecer informações atualizadas sobre futebol de maneira eficaz.
+Para usar o projeto TFC com as verificações de status de saúde, siga estas etapas:
+
+1. Clone o repositório para a sua máquina local.
+
+2. Abra o terminal na pasta raiz do projeto (onde está o arquivo 'docker-compose.yml').
+
+3. Execute o seguinte comando para iniciar os serviços com as verificações de status de saúde:
+
+   ```bash
+   docker-compose up -d --build
+   ```
+Isso inicializará os contêineres, aguardando as verificações de status de saúde configuradas.
+
+Aguarde até que os contêineres sejam criados e suas verificações de saúde sejam concluídas. Se todos os serviços estiverem operacionais, você verá a mensagem:
+
+  ```bash
+  Criação dos containers concluída com sucesso!
+  ```
+
+Em caso de problemas, consulte os logs de cada serviço para identificar a causa do problema:
+
+Execute o comando docker-compose logs para visualizar todos os logs dos serviços:
+
+ ```bash
+  docker-compose logs
+  ```
+Para ver os logs de um serviço específico (por exemplo, o back-end), use o comando:
+
+  ```bash
+  docker-compose logs <nome-do-seu-serviço>
+  ```
+Resolva o problema identificado. Por exemplo, se a senha de acesso ao banco de dados pelo Sequelize estava errada, corrija-a nas configurações do projeto.
